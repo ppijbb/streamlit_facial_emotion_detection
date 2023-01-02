@@ -101,7 +101,8 @@ def process(image):
             mp_hands.HAND_CONNECTIONS,
             mp_drawing_styles.get_default_hand_landmarks_style(),
             mp_drawing_styles.get_default_hand_connections_style())
-    return cv2.flip(image, 1)
+    return image
+    # return cv2.flip(image, 1)
 
 
 RTC_CONFIGURATION = RTCConfiguration(
@@ -122,7 +123,7 @@ class VideoProcessor(VideoProcessorBase):
         img = frame.to_ndarray(format="bgr24")
 
         img, _result = process_face(img)
-        img = process(img)
+        # img = process(img)
         if _result:
             self.result_dict.update(_result)
         return av.VideoFrame.from_ndarray(img, format="bgr24")
