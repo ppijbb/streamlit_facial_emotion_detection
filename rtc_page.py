@@ -11,17 +11,27 @@ import streamlit as st
 from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
 from streamlit_webrtc.models import VideoProcessorBase
 
+import tensorflow as tf
 from tensorflow.compat.v1 import ConfigProto, InteractiveSession
 from tensorflow.keras.models import model_from_json
 from tensorflow.keras.preprocessing import image as _IMG
-
+from streamlit.components.v1 import html
 
 config = ConfigProto()
 config.gpu_options.allow_growth = True
 session = InteractiveSession(config=config)
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  # 텐서플로가 첫 번째 GPU에 1GB 메모리만 할당하도록 제한
+  try:
+    tf.config.experimental.set_virtual_device_configuration(
+        gpus[0],
+        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)])
+  except RuntimeError as e:
+    # 프로그램 시작시에 가상 장치가 설정되어야만 합니다
+    print(e)
 # load model
 model = model_from_json(open("caer_face.json", "r").read())
-
 # load weights
 model.load_weights('caer_face.h5')
 
@@ -59,7 +69,6 @@ def process_face(image):
             # print(img_pixels.shape)
 
             predictions = model.predict(img_pixels)
-
             # find max indexed array
 
             max_index = np.argmax(predictions[0])
@@ -78,7 +87,7 @@ def process_face(image):
             }
             cv2.putText(image, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
-        return cv2.flip(image, 1), result
+        return image, result
 
     except Exception as e:
         print("Exception", e)
@@ -129,10 +138,11 @@ class VideoProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
     async def recv_queued(self, frames: List[av.VideoFrame]) -> List[av.VideoFrame]:
+        html(f"<script>console.log('output : {self.result_dict}');</script>")
         return [self.recv(frames[-1])]
 
     def on_ended(self):
-        print("############### connetion Ended #################")
+        print("############### Connection Ended #################")
         data = f"{self.result_dict}".replace("\'", "\"")
 
         if data:
@@ -166,8 +176,6 @@ def show():
     )
     if webrtc_ctx.state.signalling:
         webrtc_ctx.video_processor.code = code
-        # print(webrtc_ctx._state)
-        # print(webrtc_ctx.video_processor.code)
 
 
 if __name__ == "__main__":
