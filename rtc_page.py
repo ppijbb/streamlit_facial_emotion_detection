@@ -56,8 +56,13 @@ def process_face(image):
 
         faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
         result = None
+        paint_width = gray_img.shape[1]
+        cv2.rectangle(image, (0, 0), (paint_width, 50), (255, 255, 255), thickness=-1)
+
         for (x, y, w, h) in faces_detected:
             # print('WORKING')
+            # print(gray_img.shape)
+
             cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), thickness=7)
             roi_gray = gray_img[y - 10:y + w + 10,
                        x - 10:x + h + 10]  # cropping region of interest i.e. face area from  image
@@ -85,13 +90,14 @@ def process_face(image):
                       "neutral": predictions[0][2]
                     }
             }
+            cv2.putText(image, predicted_emotion if predicted_emotion else "No Face", (int(paint_width/3), int(25)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.putText(image, predicted_emotion, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
         return image, result
 
     except Exception as e:
         print("Exception", e)
-        return cv2.flip(image, 1)
+        return cv2.flip(image, 1), None
 
 
 def process(image):
@@ -138,8 +144,7 @@ class VideoProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
     async def recv_queued(self, frames: List[av.VideoFrame]) -> List[av.VideoFrame]:
-        html(f"<script>console.log('output : {self.result_dict}');</script>")
-        return [self.recv(frames[-1])]
+             return [self.recv(frames[-1])]
 
     def on_ended(self):
         print("############### Connection Ended #################")
