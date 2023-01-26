@@ -55,7 +55,7 @@ face_haar_cascade = cv2.CascadeClassifier("/home/ubuntu/.local/lib/python3.9/sit
 def process_face(image):
     font_path = "font/jalnan/yg-jalnan.ttf"
     font_regular = ImageFont.truetype(font=font_path, size=35)
-    font_regular_small = ImageFont.truetype(font=font_path, size=28)
+    font_regular_small = ImageFont.truetype(font=font_path, size=25)
     font_small = ImageFont.truetype(font=font_path, size=15)
     paint_width = image.shape[1]
     emotions = ['happy', 'sad', 'neutral']
