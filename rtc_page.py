@@ -15,6 +15,8 @@ import tensorflow as tf
 from tensorflow.compat.v1 import ConfigProto, InteractiveSession
 from tensorflow.keras.models import model_from_json
 from tensorflow.keras.preprocessing import image as _IMG
+
+from public_stun import public_stun_server_list
 # from streamlit.components.v1 import html
 # import mediapipe as mp
 
@@ -46,29 +48,30 @@ model.load_weights('caer_face.h5')
 # )
 
 # face detection
-face_haar_cascade = cv2.CascadeClassifier("/home/ubuntu/.local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
-# face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
+# face_haar_cascade = cv2.CascadeClassifier("/home/ubuntu/.local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
+face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
 
 
 def process_face(image):
     font_path = "font/jalnan/yg-jalnan.ttf"
-    font_regular = ImageFont.truetype(font=font_path, size=20)
-    font_small = ImageFont.truetype(font=font_path, size=10)
+    font_regular = ImageFont.truetype(font=font_path, size=35)
+    font_regular_small = ImageFont.truetype(font=font_path, size=28)
+    font_small = ImageFont.truetype(font=font_path, size=15)
     paint_width = image.shape[1]
     emotions = ['happy', 'sad', 'neutral']
     labels = ["긍정", "부정", "중립"]
-    labels_y = [10, 25, 40]
+    labels_y = [10, 40, 65]
     labels_c = [(0, 255, 0), (0, 0, 255), (125, 125, 125)]
-    start_x = int(30)
-    end_x = int(paint_width / 3)
+    start_x = int(40)
+    end_x = int(paint_width / 4)
 
     try:
         image.flags.writeable = False
         gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
         result = None
-        cv2.rectangle(image, (0, 0), (paint_width, 70), (255, 255, 255), thickness=-1)
-        cv2.rectangle(image, (0, 0), (start_x + end_x + 15, 50), (196, 196, 196), thickness=-1)
+        cv2.rectangle(image, (0, 0), (paint_width, 150), (255, 255, 255), thickness=-1)
+        cv2.rectangle(image, (0, 0), (start_x + end_x + 15, 80), (196, 196, 196), thickness=-1)
         if 0 < len(faces_detected):
             for (x, y, w, h) in faces_detected:
                 # print('WORKING')
@@ -111,7 +114,7 @@ def process_face(image):
                               text=index,
                               font=font_small,
                               fill=(0, 0, 0, 0))
-                draw.text(xy=(int(paint_width / 1.5), int(5)),
+                draw.text(xy=(int(paint_width / 1.55), int(20)),
                           text=labels[max_index],
                           font=font_regular,
                           fill=(0, 0, 0, 0))
@@ -131,9 +134,9 @@ def process_face(image):
                           text=l,
                           font=font_small,
                           fill=(0, 0, 0, 0))
-            draw.text(xy=(int(paint_width / 2), int(5)),
+            draw.text(xy=(int(paint_width / 2.7), int(20)),
                       text="얼굴이 인식되지 않았습니다.",
-                      font=font_regular,
+                      font=font_regular_small,
                       fill=(0, 0, 0, 0))
             processed = np.array(image_pil)
         return processed, result
@@ -149,9 +152,9 @@ def process_face(image):
                       text=index,
                       font=font_small,
                       fill=(0, 0, 0, 0))
-        draw.text(xy=(int(paint_width / 2), int(5)),
+        draw.text(xy=(int(paint_width / 2.7), int(20)),
                   text="얼굴이 인식되지 않았습니다.",
-                  font=font_regular,
+                  font=font_regular_small,
                   fill=(0, 0, 0, 0))
         processed = np.array(image_pil)
         return processed, None
@@ -179,16 +182,25 @@ def process_face(image):
 
 RTC_CONFIGURATION = RTCConfiguration(
     {
-        "iceServers":
-            [{
-                "urls": ["stun:stun.l.google.com:19302",
-                         "stun:stun1.l.google.com:19302",
-                         "stun:stun2.l.google.com:19302",
-                         "stun:stun3.l.google.com:19302",
-                         "stun:stun4.l.google.com:19302"]
-            }]
-        }
-    )
+        "iceServers": [{
+            "urls": public_stun_server_list
+        },
+        {
+            "urls": "turn:openrelay.metered.ca:80",
+            "username": "openrelayproject",
+            "credential": "openrelayproject",
+        },
+        {
+            "urls": "turn:openrelay.metered.ca:443",
+            "username": "openrelayproject",
+            "credential": "openrelayproject",
+        },
+        {
+            "urls": "turn:openrelay.metered.ca:443?transport=tcp",
+            "username": "openrelayproject",
+            "credential": "openrelayproject",
+        }]
+    })
 
 
 class VideoProcessor(VideoProcessorBase):
@@ -253,6 +265,7 @@ if __name__ == "__main__":
     )
     hide_menu_style = """
             <style>
+            .css-1avcm0n {visibility: hidden;}
             .css-18ni7ap {visibility: hidden;}
             .css-18e3th9 {padding: 0rem 1rem 10rem;}
             .css-1fxg7kt {gap: 0rem;}
