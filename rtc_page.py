@@ -181,7 +181,11 @@ RTC_CONFIGURATION = RTCConfiguration(
     {
         "iceServers":
             [{
-                "urls": ["stun:stun.l.google.com:19302"]
+                "urls": ["stun:stun.l.google.com:19302",
+                         "stun:stun1.l.google.com:19302",
+                         "stun:stun2.l.google.com:19302",
+                         "stun:stun3.l.google.com:19302",
+                         "stun:stun4.l.google.com:19302"]
             }]
         }
     )
@@ -232,8 +236,8 @@ def show():
         async_processing=True,
         desired_playing_state=True,
         video_html_attrs={
-            # "style": {"width": "50%", "margin": "0 auto", "border": "5px yellow solid"},
-            "controls": False,
+            "style": {"width": "100%", "margin": "0 auto", "justify-content": "center"},
+            "controls": True,
             "autoPlay": True
         },
     )
