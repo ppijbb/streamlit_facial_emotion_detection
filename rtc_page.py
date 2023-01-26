@@ -67,7 +67,7 @@ def process_face(image):
         gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
         result = None
-        cv2.rectangle(image, (0, 0), (paint_width, 50), (255, 255, 255), thickness=-1)
+        cv2.rectangle(image, (0, 0), (paint_width, 70), (255, 255, 255), thickness=-1)
         cv2.rectangle(image, (0, 0), (start_x + end_x + 15, 50), (196, 196, 196), thickness=-1)
         if 0 < len(faces_detected):
             for (x, y, w, h) in faces_detected:
@@ -131,7 +131,7 @@ def process_face(image):
                           text=l,
                           font=font_small,
                           fill=(0, 0, 0, 0))
-            draw.text(xy=(int(paint_width / 1.5), int(5)),
+            draw.text(xy=(int(paint_width / 2), int(5)),
                       text="얼굴이 인식되지 않았습니다.",
                       font=font_regular,
                       fill=(0, 0, 0, 0))
@@ -149,7 +149,7 @@ def process_face(image):
                       text=index,
                       font=font_small,
                       fill=(0, 0, 0, 0))
-        draw.text(xy=(int(paint_width / 1.5), int(5)),
+        draw.text(xy=(int(paint_width / 2), int(5)),
                   text="얼굴이 인식되지 않았습니다.",
                   font=font_regular,
                   fill=(0, 0, 0, 0))
@@ -183,8 +183,8 @@ RTC_CONFIGURATION = RTCConfiguration(
             [{
                 "urls": ["stun:stun.l.google.com:19302"]
             }]
-    }
-)
+        }
+    )
 
 
 class VideoProcessor(VideoProcessorBase):
@@ -247,4 +247,13 @@ if __name__ == "__main__":
         layout="wide",
         initial_sidebar_state="expanded",
     )
+    hide_menu_style = """
+            <style>
+            .css-18ni7ap {visibility: hidden;}
+            .css-18e3th9 {padding: 0rem 1rem 10rem;}
+            .css-1fxg7kt {gap: 0rem;}
+            .css-1wrcr25 {justify-content: center;}
+            </style>
+            """
+    st.markdown(hide_menu_style, unsafe_allow_html=True)
     show()
