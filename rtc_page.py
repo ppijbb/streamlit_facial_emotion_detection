@@ -46,8 +46,8 @@ model.load_weights('caer_face.h5')
 # )
 
 # face detection
-# face_haar_cascade = cv2.CascadeClassifier("/home/ubuntu/.local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
-face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
+face_haar_cascade = cv2.CascadeClassifier("/home/ubuntu/.local/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
+# face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
 
 
 def process_face(image):
