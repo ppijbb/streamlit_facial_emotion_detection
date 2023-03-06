@@ -55,7 +55,7 @@ face_haar_cascade = cv2.CascadeClassifier("/opt/conda/lib/python3.9/site-package
 def process_face(image):
     font_path = "font/jalnan/yg-jalnan.ttf"
     font_regular = ImageFont.truetype(font=font_path, size=35)
-    font_regular_small = ImageFont.truetype(font=font_path, size=25)
+    font_regular_small = ImageFont.truetype(font=font_path, size=20)
     font_small = ImageFont.truetype(font=font_path, size=15)
     paint_width = image.shape[1]
     emotions = ['happy', 'sad', 'neutral']
@@ -71,13 +71,13 @@ def process_face(image):
         faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
         result = None
         cv2.rectangle(image, (0, 0), (paint_width, 150), (255, 255, 255), thickness=-1)
-        cv2.rectangle(image, (0, 0), (start_x + end_x + 15, 80), (196, 196, 196), thickness=-1)
+        cv2.rectangle(image, (0, 0), (start_x + end_x + 60, 80), (196, 196, 196), thickness=-1)
         if 0 < len(faces_detected):
             for (x, y, w, h) in faces_detected:
                 # print('WORKING')
                 # print(gray_img.shape)
 
-                cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 0), thickness=5)
+                # cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 0), thickness=5) # 얼굴 박스
                 roi_gray = gray_img[y - 10:y + w + 10,
                                     x - 10:x + h + 10]  # cropping region of interest i.e. face area from  image
                 roi_gray = cv2.resize(roi_gray, (224, 224))
@@ -109,19 +109,23 @@ def process_face(image):
 
                 image_pil = Image.fromarray(image)
                 draw = ImageDraw.Draw(image_pil)
-                for index, h in zip(labels, labels_y):
+                for n, (index, h) in enumerate(zip(labels, labels_y)):
                     draw.text(xy=(int(3), int(h-5)),
                               text=index,
+                              font=font_small,
+                              fill=(0, 0, 0, 0))
+                    draw.text(xy=(int(end_x+50), int(h-5)),
+                              text=str(np.round(predictions[0][n], 3)),
                               font=font_small,
                               fill=(0, 0, 0, 0))
                 draw.text(xy=(int(paint_width / 1.55), int(20)),
                           text=labels[max_index],
                           font=font_regular,
                           fill=(0, 0, 0, 0))
-                draw.text(xy=(int(x+10), int(y-30)),
-                          text=labels[max_index],
-                          font=font_regular,
-                          fill=(255, 0, 0, 0))
+                # draw.text(xy=(int(x+10), int(y-30)), # 얼굴 박스에 라벨 보여주기
+                #           text=labels[max_index],
+                #           font=font_regular,
+                #           fill=(255, 0, 0, 0))
                 processed = np.array(image_pil)
         else:
             for h, c in zip(labels_y, labels_c):
@@ -134,7 +138,11 @@ def process_face(image):
                           text=l,
                           font=font_small,
                           fill=(0, 0, 0, 0))
-            draw.text(xy=(int(paint_width / 2.7), int(20)),
+                draw.text(xy=(int(end_x+50), int(h-5)),
+                          text="0.00",
+                          font=font_small,
+                          fill=(0, 0, 0, 0))
+            draw.text(xy=(int(paint_width / 1.9), int(20)),
                       text="얼굴이 인식되지 않았습니다.",
                       font=font_regular_small,
                       fill=(0, 0, 0, 0))
@@ -152,7 +160,11 @@ def process_face(image):
                       text=index,
                       font=font_small,
                       fill=(0, 0, 0, 0))
-        draw.text(xy=(int(paint_width / 2.7), int(20)),
+            draw.text(xy=(int(end_x + 50), int(h - 5)),
+                      text="0.00",
+                      font=font_small,
+                      fill=(0, 0, 0, 0))
+        draw.text(xy=(int(paint_width / 1.9), int(20)),
                   text="얼굴이 인식되지 않았습니다.",
                   font=font_regular_small,
                   fill=(0, 0, 0, 0))
