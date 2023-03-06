@@ -282,9 +282,8 @@ if __name__ == "__main__":
             <style>
             .css-1avcm0n {visibility: hidden;}
             .css-18ni7ap {visibility: hidden;}
-            .css-18e3th9 {padding: 0rem 1rem 10rem;}
-            .css-1fxg7kt {gap: 0rem;}
-            .css-1wrcr25 {justify-content: center;}
+            .block-container {padding: 0rem 1rem 10rem;}
+            .block-container div {justify-content: center;gap: 0rem;}
             </style>
             """
     st.markdown(hide_menu_style, unsafe_allow_html=True)
