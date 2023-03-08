@@ -273,7 +273,6 @@ def show():
         },
         video_processor_factory=VideoProcessor,
         async_processing=True,
-        async_transform=True,
         desired_playing_state=True,
         video_html_attrs={
             "style": {"width": "100%", "margin": "0 auto", "justify-content": "center"},
