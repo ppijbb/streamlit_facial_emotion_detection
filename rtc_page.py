@@ -105,7 +105,7 @@ def process_face(image):
                     }
                 }
                 for i, (h, c) in enumerate(zip(labels_y, labels_c)):
-                    cv2.line(image, (start_x, h), (int(start_x + end_x * predictions[0][i]), h), c, 10)  # 클래스별 confidence
+                    cv2.line(image, (start_x, h), (int(start_x + end_x * predictions[0][i]), h), c, 13)  # 클래스별 confidence
 
                 image_pil = Image.fromarray(image)
                 draw = ImageDraw.Draw(image_pil)
@@ -197,37 +197,37 @@ RTC_CONFIGURATION = RTCConfiguration(
         "iceServers": [{
             "urls": public_stun_server_list
         },
-        {
-            "urls": "turn:openrelay.metered.ca:80",
-            "username": "openrelayproject",
-            "credential": "openrelayproject",
-        },
-        {
-            "urls": "turn:openrelay.metered.ca:443",
-            "username": "openrelayproject",
-            "credential": "openrelayproject",
-        },
-        {
-            "urls": "turn:openrelay.metered.ca:443?transport=tcp",
-            "username": "openrelayproject",
-            "credential": "openrelayproject",
-        },
-        {
-            "urls": "turn:numb.viagenie.ca",
-            "username": 'webrtc@live.com',
-            "credential": 'muazkh'
-        },
-        {
-            "urls": "turn:192.158.29.39:3478?transport=udp",
-            "username": '28224511:1379330808',
-            "credential": 'JZEOEt2V3Qb0y27GRntt2u2PAYA='
-        },
-        {
-            "urls": "turn:192.158.29.39:3478?transport=tcp",
-            "username": '28224511:1379330808',
-            "credential": 'JZEOEt2V3Qb0y27GRntt2u2PAYA='
-        }]
-    })
+        # {
+        #     "urls": "turn:openrelay.metered.ca:80",
+        #     "username": "openrelayproject",
+        #     "credential": "openrelayproject",
+        # },
+        # {
+        #     "urls": "turn:openrelay.metered.ca:443",
+        #     "username": "openrelayproject",
+        #     "credential": "openrelayproject",
+        # },
+        # {
+        #     "urls": "turn:openrelay.metered.ca:443?transport=tcp",
+        #     "username": "openrelayproject",
+        #     "credential": "openrelayproject",
+        # },
+        # {
+        #     "urls": "turn:numb.viagenie.ca",
+        #     "username": 'webrtc@live.com',
+        #     "credential": 'muazkh'
+        # },
+        # {
+        #     "urls": "turn:192.158.29.39:3478?transport=udp",
+        #     "username": '28224511:1379330808',
+        #     "credential": 'JZEOEt2V3Qb0y27GRntt2u2PAYA='
+        # },
+        # {
+        #     "urls": "turn:192.158.29.39:3478?transport=tcp",
+        #     "username": '28224511:1379330808',
+        #     "credential": 'JZEOEt2V3Qb0y27GRntt2u2PAYA='
+        # }
+    ]})
 
 
 class VideoProcessor(VideoProcessorBase):
@@ -244,7 +244,7 @@ class VideoProcessor(VideoProcessorBase):
         return av.VideoFrame.from_ndarray(img, format="bgr24")
 
     async def recv_queued(self, frames: List[av.VideoFrame]) -> List[av.VideoFrame]:
-             return [self.recv(frames[-1])]
+        return [self.recv(frames[-1])]
 
     def on_ended(self):
         print("############### Connection Ended #################")
@@ -273,6 +273,7 @@ def show():
         },
         video_processor_factory=VideoProcessor,
         async_processing=True,
+        async_transform=True,
         desired_playing_state=True,
         video_html_attrs={
             "style": {"width": "100%", "margin": "0 auto", "justify-content": "center"},
