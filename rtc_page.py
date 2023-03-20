@@ -29,7 +29,7 @@ if gpus:
   try:
     tf.config.experimental.set_virtual_device_configuration(
         gpus[0],
-        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=2048)])
+        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=4096)])
   except RuntimeError as e:
     # 프로그램 시작시에 가상 장치가 설정되어야만 합니다
     print(e)
@@ -48,8 +48,8 @@ model.load_weights('caer_face.h5')
 # )
 
 # face detection
-face_haar_cascade = cv2.CascadeClassifier("/opt/conda/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
-# face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
+# face_haar_cascade = cv2.CascadeClassifier("/opt/conda/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
+face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
 
 
 def process_face(image):
