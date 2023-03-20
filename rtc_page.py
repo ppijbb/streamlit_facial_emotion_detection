@@ -268,7 +268,11 @@ def show():
         mode=WebRtcMode.SENDRECV,
         rtc_configuration=RTC_CONFIGURATION,
         media_stream_constraints={
-            "video": True,
+            "video": {
+                "frameRate": {"max": 3, "ideal": 1},
+                "width": {"min": 640, "max": 1920},
+                "height": {"min": 480, "max": 1080},
+            },
             "audio": False
         },
         video_processor_factory=VideoProcessor,
