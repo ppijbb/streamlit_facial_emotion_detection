@@ -270,8 +270,8 @@ def show():
         media_stream_constraints={
             "video": {
                 "frameRate": {"max": 3, "ideal": 1},
-                "width": {"min": 1024, "max": 1024},
-                "height": {"min": 768, "max": 768},
+                "width": {"min": 640, "max": 1024},
+                "height": {"min": 480, "max": 768},
             },
             "audio": False
         },
@@ -279,7 +279,7 @@ def show():
         async_processing=True,
         desired_playing_state=True,
         video_html_attrs={
-            "style": {"width": "100%", "margin": "0 auto", "justify-content": "center"},
+            "style": {"width": "100%", "max-width": "768px", "margin": "0 auto", "justify-content": "center"},
             "controls": True,
             "autoPlay": True
         },
@@ -300,6 +300,7 @@ if __name__ == "__main__":
             .css-18ni7ap {visibility: hidden;}
             .block-container {padding: 0rem 1rem 10rem;}
             .block-container div {justify-content: center;gap: 0rem;}
+            video {} 
             </style>
             """
     st.markdown(hide_menu_style, unsafe_allow_html=True)
