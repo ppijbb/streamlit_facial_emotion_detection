@@ -270,8 +270,8 @@ def show():
         media_stream_constraints={
             "video": {
                 "frameRate": {"max": 3, "ideal": 1},
-                "width": {"min": 640, "max": 1024},
-                "height": {"min": 480, "max": 768},
+                "width": {"min": 1024, "max": 1024},
+                "height": {"min": 768, "max": 768},
             },
             "audio": False
         },
