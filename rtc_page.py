@@ -70,7 +70,7 @@ def process_face(image):
         gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         faces_detected = face_haar_cascade.detectMultiScale(gray_img, 1.32, 5)
         result = None
-        cv2.rectangle(image, (0, 0), (paint_width, 150), (255, 255, 255), thickness=-1)
+        cv2.rectangle(image, (0, 0), (paint_width, 350), (255, 255, 255), thickness=-1)
         cv2.rectangle(image, (0, 0), (start_x + end_x + 60, 80), (196, 196, 196), thickness=-1)
         if 0 < len(faces_detected):
             for (x, y, w, h) in faces_detected:
