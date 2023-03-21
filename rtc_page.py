@@ -48,15 +48,15 @@ model.load_weights('caer_face.h5')
 # )
 
 # face detection
-# face_haar_cascade = cv2.CascadeClassifier("/opt/conda/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
-face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
+face_haar_cascade = cv2.CascadeClassifier("/opt/conda/lib/python3.9/site-packages/cv2/data/haarcascade_frontalface_default.xml")
+# face_haar_cascade = cv2.CascadeClassifier("C:\\Users\\Lenovo\\.conda\\envs\\python_3_9_env\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml")
 
 
 def process_face(image):
     font_path = "font/jalnan/yg-jalnan.ttf"
     font_regular = ImageFont.truetype(font=font_path, size=35)
-    font_regular_small = ImageFont.truetype(font=font_path, size=20)
-    font_small = ImageFont.truetype(font=font_path, size=15)
+    font_regular_small = ImageFont.truetype(font=font_path, size=18)
+    font_small = ImageFont.truetype(font=font_path, size=16)
     paint_width = image.shape[1]
     emotions = ['happy', 'sad', 'neutral']
     labels = ["긍정", "부정", "중립"]
@@ -87,7 +87,7 @@ def process_face(image):
 
                 # print(img_pixels.shape)
 
-                predictions = model.predict(img_pixels)
+                predictions = model.predict(x=img_pixels, verbose=0)
                 # find max indexed array
 
                 max_index = np.argmax(predictions[0])
@@ -142,7 +142,7 @@ def process_face(image):
                           text="0.00",
                           font=font_small,
                           fill=(0, 0, 0, 0))
-            draw.text(xy=(int(paint_width / 1.9), int(20)),
+            draw.text(xy=(int(paint_width / 2), int(20)),
                       text="얼굴이 인식되지 않았습니다.",
                       font=font_regular_small,
                       fill=(0, 0, 0, 0))
@@ -164,7 +164,7 @@ def process_face(image):
                       text="0.00",
                       font=font_small,
                       fill=(0, 0, 0, 0))
-        draw.text(xy=(int(paint_width / 1.9), int(20)),
+        draw.text(xy=(int(paint_width / 2), int(20)),
                   text="얼굴이 인식되지 않았습니다.",
                   font=font_regular_small,
                   fill=(0, 0, 0, 0))
@@ -270,8 +270,8 @@ def show():
         media_stream_constraints={
             "video": {
                 "frameRate": {"max": 3, "ideal": 1},
-                "width": {"min": 640, "max": 1920},
-                "height": {"min": 480, "max": 1080},
+                "width": {"min": 640, "max": 1024},
+                "height": {"min": 480, "max": 768},
             },
             "audio": False
         },
